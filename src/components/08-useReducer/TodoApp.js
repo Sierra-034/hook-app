@@ -39,6 +39,19 @@ export const TodoApp = () => {
         dispatch(action);
         reset();
     };
+
+    const handleDelete = (todoId) => {
+        console.log(todoId);
+
+        // Crear action
+        const action = {
+            type: "delete",
+            payload: todoId
+        };
+
+        // Dispatch
+        dispatch(action);
+    };
     
     return (
         <div>
@@ -57,6 +70,7 @@ export const TodoApp = () => {
                                         <p className="text-center">{index + 1}. {todo.desc}</p>
                                         <button
                                             className="btn btn-danger"
+                                            onClick={() => handleDelete(todo.id)}
                                         >
                                             Borrar
                                         </button>
