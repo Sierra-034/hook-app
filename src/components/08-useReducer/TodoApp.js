@@ -52,6 +52,13 @@ export const TodoApp = () => {
         // Dispatch
         dispatch(action);
     };
+
+    const handleToggle = (todoId) => {
+        dispatch({
+            type: "toggle",
+            payload: todoId
+        });
+    };
     
     return (
         <div>
@@ -67,7 +74,12 @@ export const TodoApp = () => {
                                         key={todo.id}
                                         className="list-group-item"
                                     >   
-                                        <p className="text-center">{index + 1}. {todo.desc}</p>
+                                        <p
+                                            className={`${todo.done && 'complete'}`}    // Esta parte es extraña
+                                            onClick={() => handleToggle(todo.id)}
+                                        >
+                                            {index + 1}. {todo.desc}
+                                        </p>
                                         <button
                                             className="btn btn-danger"
                                             onClick={() => handleDelete(todo.id)}
