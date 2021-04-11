@@ -2,8 +2,8 @@ import React, { useEffect, useReducer } from 'react';
 import { todoReducer } from './todoReducer';
 
 import './styles.css';
-import { useForm } from '../../hooks/useForm';
 import { TodoList } from './TodoList';
+import { TodoAdd } from './TodoAdd';
 
 const init = () => {
     const savedTodos = JSON.parse(localStorage.getItem('todos')) || [];
@@ -14,44 +14,24 @@ const init = () => {
 export const TodoApp = () => {
 
     const [todos, dispatch] = useReducer(todoReducer, [], init);
-    const [{description}, handleInputChange, reset] = useForm({description: ''});
 
     useEffect(() => {
         console.log("todos changed to:", todos);
         localStorage.setItem('todos', JSON.stringify(todos));
     }, [todos]);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        if(description.trim().length <= 1) return;
-
-        const newTodo = {
-            id: new Date().getTime(),
-            desc: description,
-            done: false
-        };
-
-        const action = {
+    const handleAdd = (newTodo) => {
+        dispatch({
             type: "add",
             payload: newTodo
-        };
-
-        dispatch(action);
-        reset();
+        });
     };
 
     const handleDelete = (todoId) => {
-        console.log(todoId);
-
-        // Crear action
-        const action = {
+        dispatch({
             type: "delete",
             payload: todoId
-        };
-
-        // Dispatch
-        dispatch(action);
+        });
     };
 
     const handleToggle = (todoId) => {
@@ -75,27 +55,7 @@ export const TodoApp = () => {
                     />
                 </div>
                 <div className="col-5">
-                    <h4>Agregar TODOS</h4>
-                    <hr />
-
-                    <form onSubmit={handleSubmit}>
-                        <input
-                            type="text"
-                            name="description"
-                            className="form-control"
-                            placeholder="Aprender..."
-                            autoComplete="off"
-                            value={description}
-                            onChange={handleInputChange}
-                        />
-
-                        <button
-                            type="submit"
-                            className="btn btn-outline-primary mt-1 btn-block"
-                        >
-                            Agregar
-                        </button>
-                    </form>
+                    <TodoAdd handleAdd={handleAdd} />
                 </div>
             </div>
 
